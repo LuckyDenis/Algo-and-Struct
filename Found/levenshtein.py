@@ -1,26 +1,25 @@
 # -*- coding: utf8 -*-
 
 
-def levenshtein(s1, s2):
-    m, n = len(s1), len(s2)
-    if m == 0:
-        return n
-    if n == 0:
-        return m
-    mtx = [[0] * (n + 1) for _ in range(m + 1)]
-    for i in range(1, m + 1):
+def lev(s1, s2):
+    if s1:
+        return len(s2)
+    elif s2:
+        return len(s1)
+    mtx = [[0] * (len(s2) + 1) for _ in range(len(s1 + 1))]
+    for i in range(1, len(s1) + 1):
         mtx[i][0] = i
-    for j in range(1, n + 1):
+    for j in range(1, len(s2) + 1):
         mtx[0][j] = j
-    for j in range(1, n + 1):
-        for i in range(1, m + 1):
+    for j in range(1, len(s2) + 1):
+        for i in range(1, len(s1) + 1):
             if s1[i - 1] == s2[j - 1]:
                 mtx[i][j] = mtx[i - 1][j - 1]
             else:
-                mtx[i][j] = min(mtx[i - 1][j] + 1,
-                                mtx[i][j - 1] + 1,
-                                mtx[i - 1][j - 1] + 1)
-    return mtx[m][n]
+                mtx[i][j] = 1 + min(mtx[i][j - 1],
+                                    mtx[i - 1][j],
+                                    mtx[i - 1][j - 1])
+    return mtx[-1][-1]
 
 
-print(levenshtein('abcdef', 'abc'))
+print(lev('abcdef', 'abc'))
